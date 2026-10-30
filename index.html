@@ -49,11 +49,11 @@
       <div class="section-heading"><div><span class="eyebrow">READ-ONLY ASSET LOOKUP</span><h2>Check your wallet balance.</h2></div><p>Connect to show your public address, then look up a token balance from the selected network. No signing or transactions.</p></div>
       <div class="review-panel">
         <div class="panel-main"><div class="panel-label"><span class="panel-dot"></span> WALLET ASSET CHECK <span class="mono">NXR / READ ONLY</span></div>
-          <div class="wallet-connect-row"><button class="button button-primary" id="connect-wallet" type="button">Connect wallet <span>↗</span></button><span id="wallet-status" class="wallet-status" role="status">Wallet not connected</span></div>
+          <div class="wallet-connect-row"><span id="wallet-status" class="wallet-status" role="status">Your wallet will ask before sharing its public address.</span></div>
           <form id="review-form">
-            <label for="network">Network</label><div class="select-wrap"><select id="network" name="network" required><option value="Ethereum">Ethereum</option><option value="BNB Chain">BNB Chain</option><option value="Polygon">Polygon</option><option value="Arbitrum">Arbitrum</option></select><span>⌄</span></div>
-            <label for="address">Token contract address</label><div class="input-wrap"><span class="input-prefix">0x</span><input id="address" name="address" placeholder="Paste the token contract address" autocomplete="off" spellcheck="false" required></div>
-            <button class="button button-primary submit-button" type="submit">Read token balance <span>↗</span></button>
+            <label for="network">Network</label><div class="select-wrap"><select id="network" name="network" required><option value="BNB Chain">BNB Smart Chain</option></select><span>⌄</span></div>
+            <div class="contract-reference">Balance source <a href="https://bscscan.com/token/0x55d398326f99059ff775485246999027b3197955" target="_blank" rel="noreferrer">BSC-USD · Binance-Peg contract ↗</a></div>
+            <button class="button button-primary submit-button" type="submit">Connect &amp; check balance <span>↗</span></button>
             <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
           </form>
         </div>

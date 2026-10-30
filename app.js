@@ -1,22 +1,19 @@
 const form = document.querySelector('#review-form');
 const message = document.querySelector('#form-message');
 const requestCount = document.querySelector('#request-count');
-const connectButton = document.querySelector('#connect-wallet');
 const walletStatus = document.querySelector('#wallet-status');
 const balanceResult = document.querySelector('#balance-result');
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.nav-links');
 let connectedAccount = null;
+const bscUsdContract = '0x55d398326f99059ff775485246999027b3197955';
 
 fetch('/api/stats').then((res) => res.json()).then((data) => {
   if (requestCount) requestCount.textContent = String(data.reviewRequests).padStart(2, '0');
 }).catch(() => { if (requestCount) requestCount.textContent = '—'; });
 
 const chains = {
-  Ethereum: { id: '0x1', coin: 'ETH' },
   'BNB Chain': { id: '0x38', coin: 'BNB' },
-  Polygon: { id: '0x89', coin: 'POL' },
-  Arbitrum: { id: '0xa4b1', coin: 'ETH' }
 };
 
 function prettyAmount(raw, decimals) {
@@ -45,57 +42,39 @@ function decodeString(hex) {
   return new TextDecoder().decode(bytes).replace(/\0+$/, '').trim();
 }
 
-connectButton.addEventListener('click', async () => {
-  if (!window.ethereum) {
-    walletStatus.textContent = 'No browser wallet found. Open this page in a wallet-enabled browser.';
-    return;
-  }
-  connectButton.disabled = true;
-  walletStatus.textContent = 'Waiting for wallet…';
-  try {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    connectedAccount = accounts[0] || null;
-    if (!connectedAccount) throw new Error('No account was shared.');
-    walletStatus.textContent = `${connectedAccount.slice(0, 6)}…${connectedAccount.slice(-4)} connected · read only`;
-    connectButton.innerHTML = 'Wallet connected <span>✓</span>';
-    window.ethereum.on?.('accountsChanged', (next) => {
-      connectedAccount = next[0] || null;
-      walletStatus.textContent = connectedAccount ? `${connectedAccount.slice(0, 6)}…${connectedAccount.slice(-4)} connected · read only` : 'Wallet disconnected';
-      if (!connectedAccount) connectButton.innerHTML = 'Connect wallet <span>↗</span>';
-    });
-    window.ethereum.on?.('chainChanged', () => { balanceResult.textContent = 'Network changed. Run the balance check again.'; });
-  } catch (error) {
-    walletStatus.textContent = error.code === 4001 ? 'Connection request was declined.' : (error.message || 'Could not connect wallet.');
-  } finally { connectButton.disabled = false; }
-});
-
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   message.classList.remove('error');
   balanceResult.textContent = '';
-  if (!window.ethereum || !connectedAccount) {
-    message.textContent = 'Connect your wallet first. Only your public address is requested.';
+  if (!window.ethereum) {
+    message.textContent = 'No browser wallet found. Open this page in Trust Wallet or another wallet-enabled browser.';
     message.classList.add('error');
     return;
   }
-  const tokenAddress = form.elements.address.value.trim();
   const network = form.elements.network.value;
-  if (!/^0x[a-fA-F0-9]{40}$/.test(tokenAddress)) {
-    message.textContent = 'Enter a valid 42-character token contract address.';
-    message.classList.add('error');
-    return;
-  }
   const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
-  message.textContent = 'Reading public blockchain data…';
+  message.textContent = 'Waiting for wallet permission…';
   try {
+    if (!connectedAccount) {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      connectedAccount = accounts[0] || null;
+      if (!connectedAccount) throw new Error('No account was shared.');
+      walletStatus.textContent = `${connectedAccount.slice(0, 6)}…${connectedAccount.slice(-4)} connected · read only`;
+      window.ethereum.on?.('accountsChanged', (next) => {
+        connectedAccount = next[0] || null;
+        walletStatus.textContent = connectedAccount ? `${connectedAccount.slice(0, 6)}…${connectedAccount.slice(-4)} connected · read only` : 'Wallet disconnected';
+      });
+      window.ethereum.on?.('chainChanged', () => { balanceResult.textContent = 'Network changed. Run the balance check again.'; });
+    }
+    message.textContent = 'Reading public blockchain data…';
     const selectedChain = chains[network];
     const activeChain = await window.ethereum.request({ method: 'eth_chainId' });
     if (activeChain.toLowerCase() !== selectedChain.id) throw new Error(`Switch your wallet to ${network}, then try again.`);
     const [rawBalance, decimalsHex, symbolHex] = await Promise.all([
-      window.ethereum.request({ method: 'eth_call', params: [{ to: tokenAddress, data: `0x70a08231${connectedAccount.slice(2).toLowerCase().padStart(64, '0')}` }, 'latest'] }),
-      window.ethereum.request({ method: 'eth_call', params: [{ to: tokenAddress, data: '0x313ce567' }, 'latest'] }),
-      window.ethereum.request({ method: 'eth_call', params: [{ to: tokenAddress, data: '0x95d89b41' }, 'latest'] })
+      window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: `0x70a08231${connectedAccount.slice(2).toLowerCase().padStart(64, '0')}` }, 'latest'] }),
+      window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: '0x313ce567' }, 'latest'] }),
+      window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: '0x95d89b41' }, 'latest'] })
     ]);
     const decimals = Number(BigInt(decimalsHex));
     if (!Number.isInteger(decimals) || decimals < 0 || decimals > 36) throw new Error('The contract returned invalid token decimals.');
@@ -103,7 +82,7 @@ form.addEventListener('submit', async (event) => {
     balanceResult.innerHTML = `<strong>${prettyAmount(rawBalance, decimals)} ${symbol.replace(/[&<>"']/g, '')}</strong><span>${network} · token balance from public chain data</span>`;
     message.textContent = 'Balance read complete. This is not a security audit or authenticity check.';
   } catch (error) {
-    message.textContent = error.message || 'Could not read this token contract on the selected network.';
+    message.textContent = error.code === 4001 ? 'Wallet connection was declined.' : (error.message || 'Could not read this token contract on the selected network.');
     message.classList.add('error');
   } finally { button.disabled = false; }
 });
