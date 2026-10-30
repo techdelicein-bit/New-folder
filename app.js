@@ -24,6 +24,12 @@ function prettyAmount(raw, decimals) {
   return fraction ? `${whole}.${fraction}` : String(whole);
 }
 
+function normalizeChainId(value) {
+  if (value === null || value === undefined || value === '') throw new Error('Wallet did not return a network ID.');
+  try { return `0x${BigInt(value).toString(16)}`; }
+  catch { throw new Error('Wallet returned an unrecognized network ID.'); }
+}
+
 function decodeString(hex) {
   const data = hex.startsWith('0x') ? hex.slice(2) : hex;
   if (!data || /^0+$/.test(data)) return '';
@@ -70,7 +76,7 @@ form.addEventListener('submit', async (event) => {
     message.textContent = 'Reading public blockchain data…';
     const selectedChain = chains[network];
     const activeChain = await window.ethereum.request({ method: 'eth_chainId' });
-    if (activeChain.toLowerCase() !== selectedChain.id) throw new Error(`Switch your wallet to ${network}, then try again.`);
+    if (normalizeChainId(activeChain) !== selectedChain.id) throw new Error(`Switch your wallet to ${network}, then try again.`);
     const [rawBalance, decimalsHex, symbolHex] = await Promise.all([
       window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: `0x70a08231${connectedAccount.slice(2).toLowerCase().padStart(64, '0')}` }, 'latest'] }),
       window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: '0x313ce567' }, 'latest'] }),
