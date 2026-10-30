@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0d16">
+  <meta name="description" content="Nexora is an independent smart contract review intake and on-chain research workspace.">
+  <title>Nexora — Clarity for every chain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Nexora home"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><span>NEXORA</span></a>
+    <nav class="nav-links" aria-label="Main navigation"><a href="#platform">Platform</a><a href="#networks">Networks</a><a href="#about">About</a></nav>
+    <a class="header-cta" href="#review">Request a review <span>↗</span></a>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <main id="top">
+    <section class="hero section-wrap">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> INDEPENDENT ON-CHAIN RESEARCH</div>
+        <h1>Clarity for<br>every <em>chain.</em></h1>
+        <p class="hero-text">A calmer way to explore smart contracts. Submit an address for review intake, understand the signals that matter, and make your own informed decisions.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#review">Explore a contract <span>↗</span></a><a class="text-link" href="#platform">How Nexora works <span>↓</span></a></div>
+        <div class="hero-note"><span class="note-icon">ⓘ</span> Independent research workspace. Nexora is not affiliated with any blockchain network.</div>
+      </div>
+      <div class="hero-art" aria-label="Abstract visualization of connected blockchain nodes">
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit orbit-c"></div>
+        <div class="orb-core"><span class="core-glyph">N</span><span class="core-label">NEXORA<br>INTELLIGENCE</span></div>
+        <div class="node node-one"><b>ETH</b><span>Ethereum</span><i></i></div><div class="node node-two"><b>BNB</b><span>BNB Chain</span><i></i></div><div class="node node-three"><b>POL</b><span>Polygon</span><i></i></div><div class="node node-four"><b>ARB</b><span>Arbitrum</span><i></i></div>
+        <div class="art-caption"><span class="pulse"></span> NETWORKS CONNECTED <b>04</b></div>
+        <div class="art-grid"></div>
+      </div>
+    </section>
+
+    <section class="stats section-wrap" id="platform" aria-label="Nexora platform information">
+      <div class="stat-intro"><span class="eyebrow">A BETTER STARTING POINT</span><h2>Research with<br>more signal.</h2></div>
+      <div class="stat-card"><span class="stat-icon">⌘</span><strong>04</strong><span>Supported networks</span><small>One place to start</small></div>
+      <div class="stat-card"><span class="stat-icon">◷</span><strong id="request-count">—</strong><span>Review requests</span><small>Submitted to Nexora</small></div>
+      <div class="stat-card"><span class="stat-icon">↗</span><strong>24/7</strong><span>Open research access</span><small>Explore on your schedule</small></div>
+    </section>
+
+    <section class="review-section section-wrap" id="review">
+      <div class="section-heading"><div><span class="eyebrow">CONTRACT REVIEW INTAKE</span><h2>Start with an address.</h2></div><p>Submit a public contract address to create a review request. No wallet connection or private keys needed.</p></div>
+      <div class="review-panel">
+        <div class="panel-main"><div class="panel-label"><span class="panel-dot"></span> NEW REVIEW REQUEST <span class="mono">NXR / 001</span></div>
+          <form id="review-form">
+            <label for="network">Network</label><div class="select-wrap"><select id="network" name="network" required><option value="Ethereum">Ethereum</option><option value="BNB Chain">BNB Chain</option><option value="Polygon">Polygon</option><option value="Arbitrum">Arbitrum</option></select><span>⌄</span></div>
+            <label for="address">Contract address</label><div class="input-wrap"><span class="input-prefix">0x</span><input id="address" name="address" placeholder="Paste a public contract address" autocomplete="off" spellcheck="false" required></div>
+            <button class="button button-primary submit-button" type="submit">Create review request <span>↗</span></button>
+            <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+        <aside class="panel-aside"><div class="aside-orbit"><span>N</span></div><div><span class="eyebrow">WHAT HAPPENS NEXT</span><h3>A clear, honest intake.</h3><p>Your address is saved locally by this demo backend with a queued status. It does not inspect bytecode, run an audit, or certify a token.</p><a href="#about" class="text-link">Read about Nexora <span>↗</span></a></div><div class="privacy-line"><span>◈</span> Public contract address only <span class="divider"></span> No wallet permissions</div></aside>
+      </div>
+    </section>
+
+    <section class="networks-section section-wrap" id="networks">
+      <div class="networks-copy"><span class="eyebrow">MULTI-CHAIN BY DESIGN</span><h2>One view.<br><em>Many networks.</em></h2><p>Choose a network and start with the public information already on-chain. Nexora gives you a focused place to organize your research.</p></div>
+      <div class="network-grid"><div class="network-tile"><div class="token eth">◆</div><div><b>Ethereum</b><small>Layer 1 · EVM</small></div><span>↗</span></div><div class="network-tile"><div class="token bnb">✣</div><div><b>BNB Chain</b><small>Layer 1 · EVM</small></div><span>↗</span></div><div class="network-tile"><div class="token polygon">⬡</div><div><b>Polygon</b><small>Layer 2 · EVM</small></div><span>↗</span></div><div class="network-tile"><div class="token arbitrum">◈</div><div><b>Arbitrum</b><small>Layer 2 · EVM</small></div><span>↗</span></div></div>
+    </section>
+
+    <section class="about-band section-wrap" id="about"><div class="about-symbol">N<span>↗</span></div><div><span class="eyebrow">BUILT FOR BETTER QUESTIONS</span><h2>Useful context.<br><em>No false certainty.</em></h2></div><p>Nexora is an independent concept for organizing on-chain research. We don't claim official network status, promise investment outcomes, or treat an intake request as an audit.</p></section>
+  </main>
+  <footer class="footer section-wrap"><a class="brand" href="#top"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><span>NEXORA</span></a><span>Independent on-chain research workspace</span><span>© 2026 NEXORA</span><a href="#top">Back to top ↑</a></footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>
