@@ -76,7 +76,26 @@ form.addEventListener('submit', async (event) => {
     message.textContent = 'Reading public blockchain data…';
     const selectedChain = chains[network];
     const activeChain = await window.ethereum.request({ method: 'eth_chainId' });
-    if (normalizeChainId(activeChain) !== selectedChain.id) throw new Error(`Switch your wallet to ${network}, then try again.`);
+    if (normalizeChainId(activeChain) !== selectedChain.id) {
+      message.textContent = `Requesting a switch to ${network}…`;
+      try {
+        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: selectedChain.id }] });
+      } catch (switchError) {
+        if (switchError.code !== 4902) throw new Error(`Switch your wallet to ${network}, then try again.`);
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: selectedChain.id,
+            chainName: 'BNB Smart Chain',
+            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+            rpcUrls: ['https://bsc-dataseed.bnbchain.org'],
+            blockExplorerUrls: ['https://bscscan.com']
+          }]
+        });
+      }
+      const switchedChain = await window.ethereum.request({ method: 'eth_chainId' });
+      if (normalizeChainId(switchedChain) !== selectedChain.id) throw new Error(`Switch your wallet to ${network}, then try again.`);
+    }
     const [rawBalance, decimalsHex, symbolHex] = await Promise.all([
       window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: `0x70a08231${connectedAccount.slice(2).toLowerCase().padStart(64, '0')}` }, 'latest'] }),
       window.ethereum.request({ method: 'eth_call', params: [{ to: bscUsdContract, data: '0x313ce567' }, 'latest'] }),
