@@ -1,6 +1,6 @@
 # Nexora
 
-An independent on-chain research landing page with a small Node.js backend for contract review intake.
+An independent on-chain research landing page with a read-only injected-wallet token balance lookup and a small Node.js backend for review intake.
 
 ## Run locally
 
@@ -23,4 +23,6 @@ Then open <http://localhost:3000>.
 
 The `api/` folder contains Vercel serverless handlers, separate from the browser script in `app.js`. Configure a Vercel KV compatible REST store, then add `KV_REST_API_URL` and `KV_REST_API_TOKEN` to the project's Environment Variables before deploying. The local Node server continues to use the JSONL file.
 
-This is an intake demo only. It does not connect to a chain, inspect bytecode, perform an audit, or certify contracts. Use HTTPS and a production database before exposing it publicly.
+The API intake endpoint does not inspect bytecode, perform an audit, or certify contracts. Use HTTPS and a production database before exposing it publicly.
+
+The browser wallet feature requests the connected public account and reads ERC-20 `balanceOf`, `decimals`, and `symbol` using the wallet's selected network. It does not request signatures, token approvals, or transactions. Balance display is not an audit or a guarantee that a token is legitimate.

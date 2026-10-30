@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0d16">
   <meta name="description" content="Nexora is an independent smart contract review intake and on-chain research workspace.">
-  <title>Nexora — fcgvbjnm for every chain</title>
+  <title>Nexora — Clarity for every chain</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -46,17 +46,18 @@
     </section>
 
     <section class="review-section section-wrap" id="review">
-      <div class="section-heading"><div><span class="eyebrow">CONTRACT REVIEW INTAKE</span><h2>Start with an address.</h2></div><p>Submit a public contract address to create a review request. No wallet connection or private keys needed.</p></div>
+      <div class="section-heading"><div><span class="eyebrow">READ-ONLY ASSET LOOKUP</span><h2>Check your wallet balance.</h2></div><p>Connect to show your public address, then look up a token balance from the selected network. No signing or transactions.</p></div>
       <div class="review-panel">
-        <div class="panel-main"><div class="panel-label"><span class="panel-dot"></span> NEW REVIEW REQUEST <span class="mono">NXR / 001</span></div>
+        <div class="panel-main"><div class="panel-label"><span class="panel-dot"></span> WALLET ASSET CHECK <span class="mono">NXR / READ ONLY</span></div>
+          <div class="wallet-connect-row"><button class="button button-primary" id="connect-wallet" type="button">Connect wallet <span>↗</span></button><span id="wallet-status" class="wallet-status" role="status">Wallet not connected</span></div>
           <form id="review-form">
             <label for="network">Network</label><div class="select-wrap"><select id="network" name="network" required><option value="Ethereum">Ethereum</option><option value="BNB Chain">BNB Chain</option><option value="Polygon">Polygon</option><option value="Arbitrum">Arbitrum</option></select><span>⌄</span></div>
-            <label for="address">Contract address</label><div class="input-wrap"><span class="input-prefix">0x</span><input id="address" name="address" placeholder="Paste a public contract address" autocomplete="off" spellcheck="false" required></div>
-            <button class="button button-primary submit-button" type="submit">Create review request <span>↗</span></button>
+            <label for="address">Token contract address</label><div class="input-wrap"><span class="input-prefix">0x</span><input id="address" name="address" placeholder="Paste the token contract address" autocomplete="off" spellcheck="false" required></div>
+            <button class="button button-primary submit-button" type="submit">Read token balance <span>↗</span></button>
             <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
           </form>
         </div>
-        <aside class="panel-aside"><div class="aside-orbit"><span>N</span></div><div><span class="eyebrow">WHAT HAPPENS NEXT</span><h3>A clear, honest intake.</h3><p>Your address is saved locally by this demo backend with a queued status. It does not inspect bytecode, run an audit, or certify a token.</p><a href="#about" class="text-link">Read about Nexora <span>↗</span></a></div><div class="privacy-line"><span>◈</span> Public contract address only <span class="divider"></span> No wallet permissions</div></aside>
+        <aside class="panel-aside"><div class="aside-orbit"><span>N</span></div><div><span class="eyebrow">WHAT THIS CHECK DOES</span><h3>Public data, read directly.</h3><p>Nexora reads your public wallet address and the selected token balance from your wallet's network. It never asks you to sign a message, approve tokens, send funds, or share a recovery phrase.</p><a href="#about" class="text-link">Read about Nexora <span>↗</span></a><div class="balance-result" id="balance-result" aria-live="polite"></div></div><div class="privacy-line"><span>◈</span> Read-only wallet access <span class="divider"></span> No transactions</div></aside>
       </div>
     </section>
 
