@@ -9,8 +9,11 @@ let connectedAccount = null;
 const bscUsdContract = '0x55d398326f99059ff775485246999027b3197955';
 
 fetch('/api/stats').then((res) => res.json()).then((data) => {
-  if (requestCount) requestCount.textContent = String(data.reviewRequests).padStart(2, '0');
-}).catch(() => { if (requestCount) requestCount.textContent = '—'; });
+  if (requestCount) {
+    const count = Number(data?.reviewRequests);
+    requestCount.textContent = Number.isFinite(count) ? String(count).padStart(2, '0') : '00';
+  }
+}).catch(() => { if (requestCount) requestCount.textContent = '00'; });
 
 const chains = {
   'BNB Chain': { id: '0x38', coin: 'BNB' },
